@@ -1,0 +1,12 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ],
+  // https://testing-library.com/docs/svelte-testing-library/setup/
+  // Make the TypeScript compiler aware about the @testing-library/jest-dom matchers.
+  "compilerOptions": {
+    "types": ["@testing-library/jest-dom", "vitest/globals"] // And also vitest globals, describe, test, etc...
+  },
+}
