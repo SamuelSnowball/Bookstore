@@ -1,0 +1,26 @@
+replicaCount: 2
+
+image:
+  repository: payment-service
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 9003
+  targetPort: 9003
+
+env:
+  - name: STRIPE_SECRET_KEY
+    valueFrom:
+      secretKeyRef:
+        name: stripe-secret
+        key: secret-key
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 512Mi
+  requests:
+    cpu: 250m
+    memory: 256Mi

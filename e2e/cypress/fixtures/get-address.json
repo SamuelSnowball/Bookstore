@@ -1,0 +1,13 @@
+[
+    {
+        "id": 7,
+        "userId": 1,
+        "streetAddress": "57 Rain close",
+        "city": "Manchester",
+        "state": "Manchester",
+        "postalCode": "GM9 9QX",
+        "country": "United Kingdom",
+        "isDefault": true,
+        "createdAt": "2026-02-03T08:07:14"
+    }
+]

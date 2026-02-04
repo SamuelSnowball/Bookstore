@@ -1,0 +1,148 @@
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:9.0
+    container_name: bookstore-mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: mydatabase
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - bookstore-network
+
+  auth-service:
+    image: bookstore-auth:latest
+    container_name: bookstore-auth
+    build:
+      context: ./backend
+      dockerfile: auth_service/Dockerfile
+    ports:
+      - "9000:9000"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydatabase
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_PROFILES_ACTIVE: default
+      CORS.ALLOWED.ORIGINS: "http://localhost:5173"
+      ENTITY_SERVICE_URL: "http://entity-service:9001"
+      ORDER_SERVICE_URL: "http://order-service:9002"
+      PAYMENT_SERVICE_URL: "http://payment-service:9003"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bookstore-network
+    restart: on-failure
+
+  entity-service:
+    image: bookstore-entity:latest
+    container_name: bookstore-entity
+    build:
+      context: ./backend
+      dockerfile: entity_service/Dockerfile
+    ports:
+      - "9001:9001"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydatabase
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_PROFILES_ACTIVE: default
+      CORS_ALLOWED_ORIGINS: "http://localhost:5173*" # shouldnt be required right - as now making requests from auth-service?
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bookstore-network
+    restart: on-failure
+
+  order-service:
+    image: bookstore-order:latest
+    container_name: bookstore-order
+    build:
+      context: ./backend
+      dockerfile: order_service/Dockerfile
+    ports:
+      - "9002:9002"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydatabase
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_PROFILES_ACTIVE: default
+      PAYMENT_SERVICE_URL: http://payment-service:9003
+      CORS_ALLOWED_ORIGINS: "http://localhost:5173*" # shouldnt be required right - as now making requests from auth-service?
+    depends_on:
+      mysql:
+        condition: service_healthy
+      payment-service:
+        condition: service_started
+    networks:
+      - bookstore-network
+    restart: on-failure
+
+  payment-service:
+    image: bookstore-payment:latest
+    container_name: bookstore-payment
+    build:
+      context: ./backend
+      dockerfile: payment_service/Dockerfile
+    ports:
+      - "9003:9003"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/mydatabase
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: root
+      SPRING_PROFILES_ACTIVE: default
+      ORDER_SERVICE_URL: http://order-service:9002
+      STRIPE_API_KEY: ${STRIPE_API_KEY}
+      STRIPE_REDIRECT_URL: ${STRIPE_REDIRECT_URL:-http://localhost:5173*}
+      CORS_ALLOWED_ORIGINS: "http://localhost:5173*" # shouldnt be required right - as now making requests from auth-service?
+    depends_on:
+      mysql:
+        condition: service_healthy
+    networks:
+      - bookstore-network
+    restart: on-failure
+
+  adminer:
+    image: adminer
+    container_name: bookstore-adminer
+    restart: unless-stopped
+    depends_on: 
+      - mysql
+    ports:
+      - "3001:8080"
+    networks:
+      - bookstore-network
+
+  ui:
+    image: bookstore-ui:latest
+    container_name: bookstore-ui
+    build:
+      context: ./ui
+      dockerfile: Dockerfile
+    ports:
+      - "5173:80"
+    depends_on:
+      - auth-service
+      - entity-service
+      - order-service
+      - payment-service
+    networks:
+      - bookstore-network
+    restart: unless-stopped
+
+networks:
+  bookstore-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "bookstore-ui.fullname" . }}
+  labels:
+    app: bookstore-ui
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: bookstore-ui
+  template:
+    metadata:
+      labels:
+        app: bookstore-ui
+    spec:
+      containers:
+      - name: bookstore-ui
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: http
+          containerPort: {{ .Values.service.targetPort }}
+          protocol: TCP
+        volumeMounts:
+        - name: env-config
+          mountPath: /usr/share/nginx/html/env.js
+          subPath: env.js
+        resources:
+          {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+      - name: env-config
+        configMap:
+          name: {{ include "bookstore-ui.fullname" . }}-env

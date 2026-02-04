@@ -1,0 +1,196 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="Bookstore Architecture" id="architecture">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Browser/Client -->
+        <mxCell id="browser" value="Browser" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- UI Container -->
+        <mxCell id="ui-container" value="UI (React + Vite)&lt;br&gt;:5173" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="40" width="160" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- API Gateway / Auth Service -->
+        <mxCell id="auth-service" value="Auth Service&lt;br&gt;(API Gateway)&lt;br&gt;:9000" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="320" y="180" width="160" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Entity Service -->
+        <mxCell id="entity-service" value="Entity Service&lt;br&gt;(Books, Authors)&lt;br&gt;:9001" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="120" y="340" width="140" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Order Service -->
+        <mxCell id="order-service" value="Order Service&lt;br&gt;:9002" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="330" y="340" width="140" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Payment Service -->
+        <mxCell id="payment-service" value="Payment Service&lt;br&gt;(Stripe Integration)&lt;br&gt;:9003" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="540" y="340" width="140" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- MySQL Database -->
+        <mxCell id="mysql" value="MySQL Database&lt;br&gt;:3306" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=15;fillColor=#f8cecc;strokeColor=#b85450;fontSize=12;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="340" y="500" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Adminer -->
+        <mxCell id="adminer" value="Adminer&lt;br&gt;(DB Management)&lt;br&gt;:3001" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="540" y="500" width="120" height="60" as="geometry" />
+        </mxCell>
+        
+        <!-- Stripe External Service -->
+        <mxCell id="stripe" value="Stripe API&lt;br&gt;(External)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=11;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="740" y="340" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Connections -->
+        <!-- Browser to UI -->
+        <mxCell id="browser-ui" value="HTTP" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10" edge="1" parent="1" source="browser" target="ui-container">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="300" as="sourcePoint" />
+            <mxPoint x="450" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- UI to Auth Service -->
+        <mxCell id="ui-auth" value="REST API&lt;br&gt;+ JWT Token" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10" edge="1" parent="1" source="ui-container" target="auth-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="300" as="sourcePoint" />
+            <mxPoint x="450" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Auth to Entity -->
+        <mxCell id="auth-entity" value="OpenFeign" style="endArrow=classic;html=1;rounded=0;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10" edge="1" parent="1" source="auth-service" target="entity-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="300" as="sourcePoint" />
+            <mxPoint x="450" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Auth to Order -->
+        <mxCell id="auth-order" value="OpenFeign" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10" edge="1" parent="1" source="auth-service" target="order-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="300" as="sourcePoint" />
+            <mxPoint x="450" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Auth to Payment -->
+        <mxCell id="auth-payment" value="OpenFeign" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;fontSize=10" edge="1" parent="1" source="auth-service" target="payment-service">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="300" as="sourcePoint" />
+            <mxPoint x="450" y="250" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Entity to MySQL -->
+        <mxCell id="entity-mysql" value="JDBC&lt;br&gt;jOOQ" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.25;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=10" edge="1" parent="1" source="entity-service" target="mysql">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <mxPoint x="450" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Order to MySQL -->
+        <mxCell id="order-mysql" value="JDBC&lt;br&gt;jOOQ" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=10" edge="1" parent="1" source="order-service" target="mysql">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <mxPoint x="450" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Payment to MySQL -->
+        <mxCell id="payment-mysql" value="JDBC&lt;br&gt;jOOQ" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.75;entryY=0;entryDx=0;entryDy=0;entryPerimeter=0;fontSize=10" edge="1" parent="1" source="payment-service" target="mysql">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <mxPoint x="450" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Payment to Stripe -->
+        <mxCell id="payment-stripe" value="REST API" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;fontSize=10" edge="1" parent="1" source="payment-service" target="stripe">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <mxPoint x="450" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Adminer to MySQL -->
+        <mxCell id="adminer-mysql" value="" style="endArrow=classic;startArrow=classic;html=1;rounded=0;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;entryPerimeter=0;dashed=1;dashPattern=8 8;fontSize=10" edge="1" parent="1" source="adminer" target="mysql">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="400" y="450" as="sourcePoint" />
+            <mxPoint x="450" y="400" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;dashPattern=8 8" vertex="1" parent="1">
+          <mxGeometry x="740" y="40" width="180" height="240" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend-title" value="Legend" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="750" y="50" width="60" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend-1" value="Frontend Layer" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="750" y="80" width="160" height="25" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend-2" value="API Gateway + Auth" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="750" y="115" width="160" height="25" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend-3" value="Microservices" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="750" y="150" width="160" height="25" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend-4" value="Database" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=5;fillColor=#f8cecc;strokeColor=#b85450;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="750" y="185" width="160" height="30" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="legend-5" value="External Service" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;fontSize=10" vertex="1" parent="1">
+          <mxGeometry x="750" y="225" width="160" height="30" as="geometry" />
+        </mxCell>
+        
+        <!-- Technology Stack Box -->
+        <mxCell id="tech-box" value="" style="rounded=0;whiteSpace=wrap;html=1;fillColor=none;strokeColor=#999999;dashed=1;dashPattern=8 8" vertex="1" parent="1">
+          <mxGeometry x="80" y="640" width="840" height="140" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tech-title" value="Technology Stack" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="90" y="650" width="140" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tech-frontend" value="&lt;b&gt;Frontend:&lt;/b&gt; React, TypeScript, Vite, Material-UI, React Query, React Router" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="100" y="680" width="800" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tech-backend" value="&lt;b&gt;Backend:&lt;/b&gt; Java 21, Spring Boot, Spring Security (OAuth2/JWT), Spring Cloud Gateway, OpenFeign" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="100" y="705" width="800" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tech-data" value="&lt;b&gt;Data Layer:&lt;/b&gt; MySQL 9.0, jOOQ (type-safe SQL), Liquibase (migrations), HikariCP (connection pooling)" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="100" y="730" width="800" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="tech-infra" value="&lt;b&gt;Infrastructure:&lt;/b&gt; Docker, Docker Compose, Kubernetes (Helm), Nginx" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;fontSize=11" vertex="1" parent="1">
+          <mxGeometry x="100" y="755" width="800" height="20" as="geometry" />
+        </mxCell>
+        
+        <!-- Kubernetes Note -->
+        <mxCell id="k8s-note" value="Note: System supports both Docker Compose and Kubernetes deployments" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;fontSize=11;fontStyle=2;align=center" vertex="1" parent="1">
+          <mxGeometry x="80" y="460" width="400" height="30" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

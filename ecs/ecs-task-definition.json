@@ -1,0 +1,313 @@
+{
+  "family": "bookstore-app",
+  "networkMode": "awsvpc",
+  "requiresCompatibilities": ["FARGATE"],
+  "cpu": "4096",
+  "memory": "8192",
+  "executionRoleArn": "arn:aws:iam::469860694479:role/ecsTaskExecutionRole",
+  "taskRoleArn": "arn:aws:iam::469860694479:role/ecsTaskRole",
+  "containerDefinitions": [
+    {
+      "name": "mysql",
+      "image": "mysql:9.0",
+      "essential": true,
+      "cpu": 512,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "containerPort": 3306,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "MYSQL_DATABASE",
+          "value": "mydatabase"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "MYSQL_ROOT_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:469860694479:secret:bookstore/mysql-password-t4UTFM"
+        }
+      ],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "mysqladmin ping -h localhost -u root -p$MYSQL_ROOT_PASSWORD || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 60
+      },
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs/bookstore-app",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "mysql"
+        }
+      }
+    },
+    {
+      "name": "entity-service",
+      "image": "469860694479.dkr.ecr.eu-west-2.amazonaws.com/bookstore-entity:latest",
+      "essential": true,
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 9001,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:mysql://localhost:3306/mydatabase"
+        },
+        {
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "SPRING_PROFILES_ACTIVE",
+          "value": "default"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:469860694479:secret:bookstore/mysql-password-t4UTFM"
+        }
+      ],
+      "dependsOn": [
+        {
+          "containerName": "mysql",
+          "condition": "HEALTHY"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs/bookstore-app",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "entity-service"
+        }
+      }
+    },
+    {
+      "name": "order-service",
+      "image": "469860694479.dkr.ecr.eu-west-2.amazonaws.com/bookstore-order:latest",
+      "essential": true,
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 9002,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:mysql://localhost:3306/mydatabase"
+        },
+        {
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "SPRING_PROFILES_ACTIVE",
+          "value": "default"
+        },
+        {
+          "name": "PAYMENT_SERVICE_URL",
+          "value": "http://localhost:9003"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:469860694479:secret:bookstore/mysql-password-t4UTFM"
+        }
+      ],
+      "dependsOn": [
+        {
+          "containerName": "mysql",
+          "condition": "HEALTHY"
+        },
+        {
+          "containerName": "payment-service",
+          "condition": "START"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs/bookstore-app",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "order-service"
+        }
+      }
+    },
+    {
+      "name": "payment-service",
+      "image": "469860694479.dkr.ecr.eu-west-2.amazonaws.com/bookstore-payment:latest",
+      "essential": true,
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 9003,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:mysql://localhost:3306/mydatabase"
+        },
+        {
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "SPRING_PROFILES_ACTIVE",
+          "value": "default"
+        },
+        {
+          "name": "ORDER_SERVICE_URL",
+          "value": "http://localhost:9002"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:469860694479:secret:bookstore/mysql-password-t4UTFM"
+        },
+        {
+          "name": "STRIPE_API_KEY",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:469860694479:secret:bookstore/stripe-api-key-ZgsYDc"
+        }
+      ],
+      "dependsOn": [
+        {
+          "containerName": "mysql",
+          "condition": "HEALTHY"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs/bookstore-app",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "payment-service"
+        }
+      }
+    },
+    {
+      "name": "auth-service",
+      "image": "469860694479.dkr.ecr.eu-west-2.amazonaws.com/bookstore-auth:latest",
+      "essential": true,
+      "cpu": 512,
+      "memory": 1024,
+      "portMappings": [
+        {
+          "containerPort": 9000,
+          "protocol": "tcp"
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:mysql://localhost:3306/mydatabase"
+        },
+        {
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "root"
+        },
+        {
+          "name": "SPRING_PROFILES_ACTIVE",
+          "value": "default"
+        },
+        {
+          "name": "CORS.ALLOWED.ORIGINS",
+          "value": "http://13.40.161.111/,https://your-cloudfront-domain.cloudfront.net"
+        },
+        {
+          "name": "ENTITY_SERVICE_URL",
+          "value": "http://localhost:9001"
+        },
+        {
+          "name": "ORDER_SERVICE_URL",
+          "value": "http://localhost:9002"
+        },
+        {
+          "name": "PAYMENT_SERVICE_URL",
+          "value": "http://localhost:9003"
+        }
+      ],
+      "secrets": [
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "valueFrom": "arn:aws:secretsmanager:eu-west-2:469860694479:secret:bookstore/mysql-password-t4UTFM"
+        }
+      ],
+      "dependsOn": [
+        {
+          "containerName": "mysql",
+          "condition": "HEALTHY"
+        },
+        {
+          "containerName": "entity-service",
+          "condition": "START"
+        },
+        {
+          "containerName": "order-service",
+          "condition": "START"
+        },
+        {
+          "containerName": "payment-service",
+          "condition": "START"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs/bookstore-app",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "auth-service"
+        }
+      }
+    },
+    {
+      "name": "ui",
+      "image": "469860694479.dkr.ecr.eu-west-2.amazonaws.com/bookstore-ui:latest",
+      "essential": true,
+      "cpu": 256,
+      "memory": 512,
+      "portMappings": [
+        {
+          "containerPort": 5173,
+          "protocol": "tcp"
+        }
+      ],
+      "dependsOn": [
+        {
+          "containerName": "auth-service",
+          "condition": "START"
+        }
+      ],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "ecs/bookstore-app",
+          "awslogs-region": "eu-west-2",
+          "awslogs-stream-prefix": "ui"
+        }
+      }
+    }
+  ]
+}

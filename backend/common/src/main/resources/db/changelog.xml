@@ -1,0 +1,67 @@
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
+
+    <!-- 
+    Using XML configuration to load SQL files as well as CSV data via changeSet / loadData 
+    -->
+
+    <!-- Author -->
+    <changeSet id="1" author="liquibase">
+        <sqlFile path="db/author.sql" splitStatements="true" endDelimiter=";" />
+    </changeSet>
+
+    <!-- Book -->
+    <changeSet id="2" author="liquibase">
+        <sqlFile path="db/book.sql" splitStatements="true" endDelimiter=";" />
+    </changeSet>
+
+    <!-- Book Author View -->
+    <changeSet id="3" author="liquibase">
+        <sqlFile path="db/book_author.sql" splitStatements="true" endDelimiter=";" />
+    </changeSet>
+
+    <!-- Load authors data -->
+    <changeSet id="4" author="liquibase">
+        <loadData
+            file="db/data/authors.csv"
+            tableName="author">
+            <column name="first_name" type="string" />
+            <column name="last_name" type="string" />
+        </loadData>
+    </changeSet>
+
+    <!-- Load books data -->
+    <changeSet id="5" author="liquibase">
+        <loadData
+            file="db/data/books.csv"
+            tableName="book"
+            usePreparedStatements="true">
+            <column name="author_id" type="numeric" />
+            <column name="title" type="string" />
+            <column name="price" type="numeric" />
+            <column name="description" type="string" />
+        </loadData>
+    </changeSet>
+
+    <!-- User functionality -->
+    <changeSet id="6" author="liquibase">
+        <sqlFile path="db/user.sql" splitStatements="true" endDelimiter=";" />
+    </changeSet>
+
+    <!-- Cart functionality -->
+    <changeSet id="7" author="liquibase">
+        <sqlFile path="db/cart.sql" splitStatements="true" endDelimiter=";" />
+    </changeSet>
+
+    <!-- Orders functionality -->
+    <changeSet id="8" author="liquibase">
+        <sqlFile path="db/orders.sql" splitStatements="true" endDelimiter=";" />
+    </changeSet>
+
+    <!-- Address functionality -->
+    <changeSet id="9" author="liquibase">
+        <sqlFile path="db/address.sql" splitStatements="true" endDelimiter=";" />
+    </changeSet>
+
+</databaseChangeLog>

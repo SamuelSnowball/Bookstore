@@ -1,0 +1,33 @@
+replicaCount: 2
+
+image:
+  repository: bookstore-api
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 9000
+  targetPort: 9000
+
+env:
+  - name: SPRING_DATASOURCE_URL
+    value: "jdbc:mysql://mysql:3306/mydatabase?serverTimezone=UTC"
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: username
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: password
+
+resources:
+  limits:
+    cpu: 1000m
+    memory: 1Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi

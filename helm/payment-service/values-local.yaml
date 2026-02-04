@@ -1,0 +1,58 @@
+replicaCount: 1
+
+image:
+  repository: bookstore-payment
+  pullPolicy: Never  # Use local images
+  tag: "latest"
+
+service:
+  type: ClusterIP
+  port: 9003
+  targetPort: 9003
+
+env:
+  - name: SPRING_DATASOURCE_URL
+    value: "jdbc:mysql://mysql.bookstore.svc.cluster.local:3306/mydatabase?serverTimezone=UTC"
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: username
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: password
+  - name: ORDER_SERVICE_URL
+    value: "http://order-service.bookstore.svc.cluster.local:9002"
+  - name: STRIPE_API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: stripe-secret
+        key: api-key
+  - name: STRIPE_REDIRECT_URL
+    value: "http://localhost:5173"
+  - name: JAVA_OPTS
+    value: "-Xms256m -Xmx768m -XX:MaxMetaspaceSize=256m"
+
+resources:
+  limits:
+    cpu: 500m
+    memory: 1Gi
+  requests:
+    cpu: 200m
+    memory: 512Mi
+
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 9003
+  initialDelaySeconds: 30
+  periodSeconds: 10
+
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 9003
+  initialDelaySeconds: 60
+  periodSeconds: 10

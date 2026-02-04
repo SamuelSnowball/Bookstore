@@ -1,0 +1,14 @@
+[
+    {
+        "cartItemId": 7,
+        "userId": 1,
+        "bookId": 1,
+        "bookQuantity": 1,
+        "authorId": 2708,
+        "title": "The Forgotten Chronicles",
+        "price": 16.31,
+        "description": "A masterfully crafted story that weaves together loyalty and suspense.",
+        "firstName": "Charles",
+        "lastName": "Allen"
+    }
+]

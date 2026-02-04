@@ -1,0 +1,23 @@
+replicaCount: 1
+
+image:
+  repository: bookstore-ui
+  pullPolicy: Never  # Use local images
+  tag: "latest"
+
+service:
+  type: NodePort  # Use NodePort for easy local access
+  port: 80
+  targetPort: 80
+  nodePort: 30080  # Access via localhost:30080
+
+env:
+  apiUrl: "http://localhost:30000"
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 128Mi
+  requests:
+    cpu: 100m
+    memory: 64Mi

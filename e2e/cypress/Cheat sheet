@@ -1,0 +1,126 @@
+Cheat sheet
+
+# Getting elements, inputs / buttons
+// input here is the type of the HTML element
+// so when I want to select an input field, I use 'input'
+// and when I want to select a button, I use 'button'
+
+// By placeholder text
+cy.get('input[placeholder="Username"]')
+cy.get('input[placeholder="Password"]')
+
+// By ID
+cy.get("#username").type("username");
+cy.get("#password").type("DemoUserPassword!$$"); // Unique password unlikely to be in breach database
+
+// By name attribute
+cy.get('input[name="username"]').type("myusername");
+cy.get('input[name="password"]').type("mypassword");
+
+// By type
+cy.get('button[type="submit"]').click();
+
+.its() // requires that the property you're asking about exists on the object.
+
+# Chaining from a cy.get()
+cy.get('textarea.post-body').type('This is an excellent post.')
+
+Here are even more action commands Cypress provides to interact with your app:
+
+.blur() - Make a focused DOM element blur.
+.focus() - Focus on a DOM element.
+.clear() - Clear the value of an input or textarea.
+.check() - Check checkbox(es) or radio(s).
+.uncheck() - Uncheck checkbox(es).
+.select() - Select an <option> within a <select>.
+.dblclick() - Double-click a DOM element.
+.rightclick() - Right-click a DOM element.
+
+# Cypress assertions
+cy.get(':checkbox').should('be.disabled') // This uses jquery selector to get all checkboxes, see below for more jquery examples
+cy.get('form').should('have.class', 'form-horizontal')
+cy.get('input').should('not.have.value', 'US')
+
+You can chain multiple assertions together using .and(), which is another name for .should() that makes things more readable:
+
+cy.get('#header a')
+  .should('have.class', 'active')
+  .and('have.attr', 'href', '/users')
+
+# Changing the default timeout of the order
+
+// 🚨 DOES NOT WORK
+cy.get('.selector').should('be.visible', { timeout: 1000 })
+// ✅ THE CORRECT WAY
+cy.get('.selector', { timeout: 1000 }).should('be.visible')
+
+# Cypress jquery selectors
+
+// Form element selectors
+cy.get(':checkbox')    // All checkboxes
+cy.get(':radio')       // All radio buttons
+cy.get(':text')        // All text inputs
+cy.get(':password')    // All password inputs
+cy.get(':submit')      // All submit buttons
+cy.get(':button')      // All buttons
+cy.get(':input')       // All input, textarea, select, button elements
+
+// State selectors
+cy.get(':checked')     // All checked checkboxes/radios
+cy.get(':selected')    // All selected options in <select>
+cy.get(':disabled')    // All disabled elements
+cy.get(':enabled')     // All enabled elements
+cy.get(':visible')     // All visible elements
+cy.get(':hidden')      // All hidden elements
+
+// Positional
+cy.get('li:first')     // First <li>
+cy.get('li:last')      // Last <li>
+cy.get('li:even')      // Even <li> elements
+cy.get('li:odd')       // Odd <li> elements
+
+# Cypress assertions for empty elements
+
+// Check if element is empty (no children, no text)
+cy.get('.cart-items').should('be.empty');
+
+// Check if text is empty
+cy.get('.cart-count').should('have.text', '');
+
+// Check if element doesn't exist at all
+cy.get('.cart-item').should('not.exist');
+
+// Check if element has no children
+cy.get('.book-list').children().should('have.length', 0);
+
+// Check if value is empty (for inputs)
+cy.get('input').should('have.value', '');
+
+# Testing empty contains
+cy.contains('Error message').should('not.exist');
+
+
+# Testing MUI icons
+Getting by aria-label
+
+<IconButton aria-label="remove from cart" onClick={onRemove}>
+  <Delete />
+</IconButton>
+
+cy.get('button[aria-label="remove from cart"]').first()..should('have.text', '');
+
+# Searching for elements within others
+Why: .contains() narrows down to the specific element with that text. When you called .within() on it, you were only searching inside that Typography element, not the whole drawer.
+cy.get('[aria-label="cart count icon"]').find('.MuiBadge-badge').should('have.text', '0');
+
+// OR use .within()
+cy.get('[aria-label="cart count icon"]').within(() => {
+  cy.get('.MuiBadge-badge').should('have.text', '0');
+});
+
+
+# Info why using MUI class names is a bad idea
+1. version changes
+2. In production builds, MUI generates classes like .css-1h9z7r5-MuiCard-root with random hashes. Your .MuiCard-root selector won't work.
+3. its testing implementation details, if Mui changes, your tests break, even if your app still works
+4. becomes brittle, if you switch styling it can break

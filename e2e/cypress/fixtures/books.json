@@ -1,0 +1,92 @@
+[
+    {
+        "id": 1,
+        "authorId": 2708,
+        "title": "The Forgotten Chronicles",
+        "price": 16.31,
+        "description": "A masterfully crafted story that weaves together loyalty and suspense.",
+        "firstName": "Charles",
+        "lastName": "Allen"
+    },
+    {
+        "id": 2,
+        "authorId": 4494,
+        "title": "The Cursed Mystery",
+        "price": 8.66,
+        "description": "Prepare for an extraordinary adventure filled with ambition and unexpected twists.",
+        "firstName": "Ashley",
+        "lastName": "Sanchez"
+    },
+    {
+        "id": 3,
+        "authorId": 4154,
+        "title": "The Final Ocean of City",
+        "price": 14.46,
+        "description": "Prepare for an extraordinary adventure filled with mystery and unexpected twists.",
+        "firstName": "Michelle",
+        "lastName": "Davis"
+    },
+    {
+        "id": 4,
+        "authorId": 1380,
+        "title": "The Great Desert",
+        "price": 10.50,
+        "description": "An epic tale of betrayal and redemption that will captivate your imagination.",
+        "firstName": "Joseph",
+        "lastName": "Sanchez"
+    },
+    {
+        "id": 5,
+        "authorId": 4964,
+        "title": "The Lost Dream",
+        "price": 26.87,
+        "description": "A masterfully crafted story that weaves together sacrifice and suspense.",
+        "firstName": "Paul",
+        "lastName": "Robinson"
+    },
+    {
+        "id": 6,
+        "authorId": 1971,
+        "title": "The Forgotten Empire of Island",
+        "price": 22.50,
+        "description": "A thrilling adventure that takes readers on an unforgettable journey through intrigue worlds.",
+        "firstName": "Donald",
+        "lastName": "Torres"
+    },
+    {
+        "id": 7,
+        "authorId": 4197,
+        "title": "The Hidden Tale",
+        "price": 25.79,
+        "description": "Immerse yourself in this breathtaking saga of romance and love.",
+        "firstName": "Paul",
+        "lastName": "Hill"
+    },
+    {
+        "id": 8,
+        "authorId": 4158,
+        "title": "The Final Desert",
+        "price": 16.27,
+        "description": "Experience a gripping tale of intrigue that will keep you turning pages late into the night.",
+        "firstName": "Emily",
+        "lastName": "Davis"
+    },
+    {
+        "id": 9,
+        "authorId": 4560,
+        "title": "The Terrible Desert of Ocean",
+        "price": 16.98,
+        "description": "A thrilling adventure that takes readers on an unforgettable journey through adventure worlds.",
+        "firstName": "Sandra",
+        "lastName": "Perez"
+    },
+    {
+        "id": 10,
+        "authorId": 4637,
+        "title": "The Ancient Desert",
+        "price": 19.87,
+        "description": "A masterfully crafted story that weaves together hope and suspense.",
+        "firstName": "Charles",
+        "lastName": "Robinson"
+    }
+]

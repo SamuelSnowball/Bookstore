@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "bookstore-ui.fullname" . }}-env
+  labels:
+    app: bookstore-ui
+data:
+  env.js: |
+    // Runtime environment configuration for Kubernetes
+    window.ENV = {
+      VITE_API_URL: '{{ .Values.env.apiUrl }}',
+    };
