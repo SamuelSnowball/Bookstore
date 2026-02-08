@@ -38,7 +38,7 @@ public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>mydatabase.databasechangeloglock</code>
+     * The reference instance of <code>mydatabase.DATABASECHANGELOGLOCK</code>
      */
     public static final Databasechangeloglock DATABASECHANGELOGLOCK = new Databasechangeloglock();
 
@@ -51,22 +51,22 @@ public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord
     }
 
     /**
-     * The column <code>mydatabase.databasechangeloglock.ID</code>.
+     * The column <code>mydatabase.DATABASECHANGELOGLOCK.ID</code>.
      */
     public final TableField<DatabasechangeloglockRecord, Integer> ID = createField(DSL.name("ID"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangeloglock.LOCKED</code>.
+     * The column <code>mydatabase.DATABASECHANGELOGLOCK.LOCKED</code>.
      */
     public final TableField<DatabasechangeloglockRecord, Byte> LOCKED = createField(DSL.name("LOCKED"), SQLDataType.TINYINT.nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangeloglock.LOCKGRANTED</code>.
+     * The column <code>mydatabase.DATABASECHANGELOGLOCK.LOCKGRANTED</code>.
      */
     public final TableField<DatabasechangeloglockRecord, LocalDateTime> LOCKGRANTED = createField(DSL.name("LOCKGRANTED"), SQLDataType.LOCALDATETIME(0), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangeloglock.LOCKEDBY</code>.
+     * The column <code>mydatabase.DATABASECHANGELOGLOCK.LOCKEDBY</code>.
      */
     public final TableField<DatabasechangeloglockRecord, String> LOCKEDBY = createField(DSL.name("LOCKEDBY"), SQLDataType.VARCHAR(255), this, "");
 
@@ -79,7 +79,7 @@ public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord
     }
 
     /**
-     * Create an aliased <code>mydatabase.databasechangeloglock</code> table
+     * Create an aliased <code>mydatabase.DATABASECHANGELOGLOCK</code> table
      * reference
      */
     public Databasechangeloglock(String alias) {
@@ -87,7 +87,7 @@ public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord
     }
 
     /**
-     * Create an aliased <code>mydatabase.databasechangeloglock</code> table
+     * Create an aliased <code>mydatabase.DATABASECHANGELOGLOCK</code> table
      * reference
      */
     public Databasechangeloglock(Name alias) {
@@ -95,10 +95,10 @@ public class Databasechangeloglock extends TableImpl<DatabasechangeloglockRecord
     }
 
     /**
-     * Create a <code>mydatabase.databasechangeloglock</code> table reference
+     * Create a <code>mydatabase.DATABASECHANGELOGLOCK</code> table reference
      */
     public Databasechangeloglock() {
-        this(DSL.name("databasechangeloglock"), null);
+        this(DSL.name("DATABASECHANGELOGLOCK"), null);
     }
 
     @Override

@@ -1,21 +1,21 @@
 package com.bookstore.payment.controller;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.bookstore.payment.client.OrderServiceClient;
+import com.bookstore.payment.model.PaymentRequest;
+import com.bookstore.payment.model.PaymentResponse;
 import com.example.common.controller.BaseController;
-import com.example.common.dto.CartItemDetailDto;
+import com.example.common.model.OrderStatus;
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.checkout.Session;
@@ -30,15 +30,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @RestController
 @RequestMapping(path = "/payment", produces = { MediaType.APPLICATION_JSON_VALUE })
 @Tag(name = "Payment", description = "APIs for Stripe payment operations")
 @Slf4j
+@RequiredArgsConstructor
 public class PaymentController extends BaseController {
-
-    private final OrderServiceClient orderServiceClient;
 
     @Value("${stripe.api.key}")
     private String stripeApiKey;
@@ -46,44 +46,58 @@ public class PaymentController extends BaseController {
     @Value("${redirect.url:http://localhost:5173}")
     private String redirectUrl;
 
-    public PaymentController(OrderServiceClient orderServiceClient) {
-        this.orderServiceClient = orderServiceClient;
-    }
-
     @PostConstruct
     public void init() {
         Stripe.apiKey = stripeApiKey;
     }
 
     @PostMapping("/create-checkout-session")
-    @Operation(summary = "Create a Stripe Checkout Session", description = "Creates a Checkout Session with custom UI mode from the authenticated user's cart and returns the client secret")
+    @Operation(summary = "Create a Stripe Checkout Session", description = "Creates a Checkout Session with custom UI mode from order payment request and returns the client secret")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Checkout Session created successfully", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(example = "{\"clientSecret\": \"cs_test_...\"}"))),
-            @ApiResponse(responseCode = "400", description = "Cart is empty or invalid"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized - valid JWT required"),
+            @ApiResponse(responseCode = "200", description = "Checkout Session created successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid payment request"),
             @ApiResponse(responseCode = "500", description = "Stripe API error")
     })
-    public Map<String, String> createCheckoutSession() throws StripeException {
+    public PaymentResponse createCheckoutSession(@RequestBody(required = false) PaymentRequest paymentRequest) throws StripeException {
+        log.info("Received payment request: {}", paymentRequest);
 
-        // Fetch cart items for the user via Order Service (JWT token is propagated automatically)
-        List<CartItemDetailDto> cartItems = orderServiceClient.getCartItems();
-
-        if (cartItems.isEmpty()) {
-            throw new org.springframework.web.server.ResponseStatusException(
-                    HttpStatus.BAD_REQUEST,
-                    "Cart is empty");
+        if (paymentRequest == null) {
+            log.error("Payment request is null");
+            return PaymentResponse.builder()
+                    .status(PaymentResponse.PaymentStatus.PAYMENT_FAILED)
+                    .message("Payment request cannot be null")
+                    .build();
         }
 
-        // Build line items from cart
+        // Security: Validate user is authenticated
+        // Note: We trust the order service has already validated:
+        // 1. The authenticated user owns the cart used to create the order
+        // 2. The orderId was just created by this user's request
+        // 3. The items/totalAmount match the order created
+        // This avoids circular dependency (Order->Payment and Payment->Order)
+        Integer authenticatedUserId = getCurrentUserId();
+        log.info("Creating checkout session for user {} and order {}", authenticatedUserId, paymentRequest.getOrderId());
+        
+        if (paymentRequest.getItems() == null || paymentRequest.getItems().isEmpty()) {
+            return PaymentResponse.builder()
+                    .orderId(paymentRequest.getOrderId())
+                    .status(PaymentResponse.PaymentStatus.PAYMENT_FAILED)
+                    .message("No items in payment request")
+                    .build();
+        }
+
+        // Build line items from payment request
         SessionCreateParams.Builder paramsBuilder = SessionCreateParams.builder()
                 .setUiMode(SessionCreateParams.UiMode.CUSTOM)
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setReturnUrl(redirectUrl + "/complete?session_id={CHECKOUT_SESSION_ID}");
+                .setReturnUrl(redirectUrl + "/complete?session_id={CHECKOUT_SESSION_ID}")
+                .putMetadata("orderId", String.valueOf(paymentRequest.getOrderId()))
+                .putMetadata("userId", String.valueOf(authenticatedUserId));
 
-        for (CartItemDetailDto item : cartItems) {
+        for (PaymentRequest.OrderItem item : paymentRequest.getItems()) {
             paramsBuilder.addLineItem(
                     SessionCreateParams.LineItem.builder()
-                            .setQuantity((long) item.getBookQuantity())
+                            .setQuantity((long) item.getQuantity())
                             .setPriceData(
                                     SessionCreateParams.LineItem.PriceData.builder()
                                             .setCurrency("gbp")
@@ -98,9 +112,15 @@ public class PaymentController extends BaseController {
 
         SessionCreateParams params = paramsBuilder.build();
         Session session = Session.create(params);
-        log.info("Created checkout session: {}", session.getId());
+        log.info("Created checkout session {} for order {}", session.getId(), paymentRequest.getOrderId());
 
-        return Map.of("clientSecret", session.getClientSecret());
+        return PaymentResponse.builder()
+                .orderId(paymentRequest.getOrderId())
+                .status(PaymentResponse.PaymentStatus.PAYMENT_SUCCESS)
+                .message("Checkout session created")
+                .clientSecret(session.getClientSecret())
+                .transactionId(session.getId())
+                .build();
     }
 
     /*
@@ -137,54 +157,51 @@ public class PaymentController extends BaseController {
             // For now, just returning the ID as it's already a string reference
         }
 
-        log.info("Retrieved session status for: {}", sessionId);
-
         return responseData;
     }
 
     @PostMapping("/complete-order")
-    @Operation(
-        summary = "Complete order after successful payment",
-        description = "Creates an order from the user's cart after payment is confirmed. Clears the cart after order creation."
-    )
+    @Operation(summary = "Complete order after successful payment", description = "Verifies Stripe payment session and updates order status to PAYMENT_SUCCESS")
     @ApiResponses(value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "Order created successfully",
-            content = @Content(
-                mediaType = MediaType.APPLICATION_JSON_VALUE,
-                schema = @Schema(example = "{\"orderId\": 123, \"message\": \"Order created successfully\"}")
-            )
-        ),
-        @ApiResponse(responseCode = "400", description = "Cart is empty or payment not complete"),
-        @ApiResponse(responseCode = "401", description = "Unauthorized - valid JWT required"),
-        @ApiResponse(responseCode = "500", description = "Error creating order")
+            @ApiResponse(responseCode = "200", description = "Order status updated successfully"),
+            @ApiResponse(responseCode = "400", description = "Invalid session or payment not completed"),
+            @ApiResponse(responseCode = "500", description = "Stripe API error")
     })
-    public Map<String, Object> completeOrder(
-        @Parameter(description = "The Checkout Session ID", required = true, example = "cs_test_...")
-        @RequestParam("session_id") String sessionId) throws StripeException {
-        
+    public Map<String, String> completeOrder(
+            @Parameter(description = "The Checkout Session ID", required = true, example = "cs_test_...") @RequestParam("session_id") String sessionId)
+            throws StripeException {
+        log.info("Completing order for session: {}", sessionId);
+
+        // Retrieve the session to verify payment status
+        SessionRetrieveParams params = SessionRetrieveParams.builder()
+                .addExpand("payment_intent")
+                .build();
+
+        Session session = Session.retrieve(sessionId, params, null);
+
         // Verify payment was successful
-        Session session = Session.retrieve(sessionId, SessionRetrieveParams.builder().build(), null);
-        
         if (!"complete".equals(session.getStatus()) || !"paid".equals(session.getPaymentStatus())) {
-            throw new org.springframework.web.server.ResponseStatusException(
-                HttpStatus.BAD_REQUEST,
-                "Payment not complete"
-            );
+            log.error("Payment not completed for session {}. Status: {}, Payment status: {}", 
+                    sessionId, session.getStatus(), session.getPaymentStatus());
+            throw new IllegalStateException("Payment was not completed successfully");
         }
 
-        // Get authenticated user
-        Integer userId = getCurrentUserId();
+        // Extract order ID from session metadata
+        Map<String, String> metadata = session.getMetadata();
+        if (metadata == null || !metadata.containsKey("orderId")) {
+            log.error("Order ID not found in session metadata for session {}", sessionId);
+            throw new IllegalStateException("Order ID not found in payment session");
+        }
+
+        int orderId = Integer.parseInt(metadata.get("orderId"));
+        log.info("Payment verified for order {} with session {}", orderId, sessionId);
         
-        // Create order from cart via Order Service (JWT token is propagated automatically)
-        int orderId = orderServiceClient.createOrderFromCart();
-        
-        log.info("Completed order {} for user {} after payment {}", orderId, userId, sessionId);
-        
-        return Map.of(
-            "orderId", orderId,
-            "message", "Order created successfully"
-        );
+        log.info("Payment completed successfully for session {} and order {}", sessionId, orderId);
+
+        Map<String, String> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("message", "Payment verified successfully");
+        response.put("orderId", String.valueOf(orderId));
+        return response;
     }
 }

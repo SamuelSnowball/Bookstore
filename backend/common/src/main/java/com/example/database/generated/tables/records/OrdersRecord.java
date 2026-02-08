@@ -64,17 +64,31 @@ public class OrdersRecord extends UpdatableRecordImpl<OrdersRecord> {
     }
 
     /**
+     * Setter for <code>mydatabase.orders.status</code>.
+     */
+    public void setStatus(String value) {
+        set(3, value);
+    }
+
+    /**
+     * Getter for <code>mydatabase.orders.status</code>.
+     */
+    public String getStatus() {
+        return (String) get(3);
+    }
+
+    /**
      * Setter for <code>mydatabase.orders.created_at</code>.
      */
     public void setCreatedAt(LocalDateTime value) {
-        set(3, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>mydatabase.orders.created_at</code>.
      */
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(3);
+        return (LocalDateTime) get(4);
     }
 
     // -------------------------------------------------------------------------
@@ -100,12 +114,13 @@ public class OrdersRecord extends UpdatableRecordImpl<OrdersRecord> {
     /**
      * Create a detached, initialised OrdersRecord
      */
-    public OrdersRecord(Integer id, Integer userId, BigDecimal totalPrice, LocalDateTime createdAt) {
+    public OrdersRecord(Integer id, Integer userId, BigDecimal totalPrice, String status, LocalDateTime createdAt) {
         super(Orders.ORDERS);
 
         setId(id);
         setUserId(userId);
         setTotalPrice(totalPrice);
+        setStatus(status);
         setCreatedAt(createdAt);
         resetChangedOnNotNull();
     }
@@ -120,6 +135,7 @@ public class OrdersRecord extends UpdatableRecordImpl<OrdersRecord> {
             setId(value.getId());
             setUserId(value.getUserId());
             setTotalPrice(value.getTotalPrice());
+            setStatus(value.getStatus());
             setCreatedAt(value.getCreatedAt());
             resetChangedOnNotNull();
         }

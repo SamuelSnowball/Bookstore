@@ -41,28 +41,28 @@ public class Databasechangeloglock implements Serializable {
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.ID</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.ID</code>.
      */
     public Integer getId() {
         return this.id;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.LOCKED</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKED</code>.
      */
     public Byte getLocked() {
         return this.locked;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.LOCKGRANTED</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKGRANTED</code>.
      */
     public LocalDateTime getLockgranted() {
         return this.lockgranted;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.LOCKEDBY</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKEDBY</code>.
      */
     public String getLockedby() {
         return this.lockedby;

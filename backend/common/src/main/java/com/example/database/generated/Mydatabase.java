@@ -69,12 +69,12 @@ public class Mydatabase extends SchemaImpl {
     public final CartItemDetailVw CART_ITEM_DETAIL_VW = CartItemDetailVw.CART_ITEM_DETAIL_VW;
 
     /**
-     * The table <code>mydatabase.databasechangelog</code>.
+     * The table <code>mydatabase.DATABASECHANGELOG</code>.
      */
     public final Databasechangelog DATABASECHANGELOG = Databasechangelog.DATABASECHANGELOG;
 
     /**
-     * The table <code>mydatabase.databasechangeloglock</code>.
+     * The table <code>mydatabase.DATABASECHANGELOGLOCK</code>.
      */
     public final Databasechangeloglock DATABASECHANGELOGLOCK = Databasechangeloglock.DATABASECHANGELOGLOCK;
 

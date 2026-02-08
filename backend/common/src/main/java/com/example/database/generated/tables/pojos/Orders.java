@@ -20,12 +20,14 @@ public class Orders implements Serializable {
     private final Integer id;
     private final Integer userId;
     private final BigDecimal totalPrice;
+    private final String status;
     private final LocalDateTime createdAt;
 
     public Orders(Orders value) {
         this.id = value.id;
         this.userId = value.userId;
         this.totalPrice = value.totalPrice;
+        this.status = value.status;
         this.createdAt = value.createdAt;
     }
 
@@ -33,11 +35,13 @@ public class Orders implements Serializable {
         Integer id,
         Integer userId,
         BigDecimal totalPrice,
+        String status,
         LocalDateTime createdAt
     ) {
         this.id = id;
         this.userId = userId;
         this.totalPrice = totalPrice;
+        this.status = status;
         this.createdAt = createdAt;
     }
 
@@ -60,6 +64,13 @@ public class Orders implements Serializable {
      */
     public BigDecimal getTotalPrice() {
         return this.totalPrice;
+    }
+
+    /**
+     * Getter for <code>mydatabase.orders.status</code>.
+     */
+    public String getStatus() {
+        return this.status;
     }
 
     /**
@@ -96,6 +107,12 @@ public class Orders implements Serializable {
         }
         else if (!this.totalPrice.equals(other.totalPrice))
             return false;
+        if (this.status == null) {
+            if (other.status != null)
+                return false;
+        }
+        else if (!this.status.equals(other.status))
+            return false;
         if (this.createdAt == null) {
             if (other.createdAt != null)
                 return false;
@@ -112,6 +129,7 @@ public class Orders implements Serializable {
         result = prime * result + ((this.id == null) ? 0 : this.id.hashCode());
         result = prime * result + ((this.userId == null) ? 0 : this.userId.hashCode());
         result = prime * result + ((this.totalPrice == null) ? 0 : this.totalPrice.hashCode());
+        result = prime * result + ((this.status == null) ? 0 : this.status.hashCode());
         result = prime * result + ((this.createdAt == null) ? 0 : this.createdAt.hashCode());
         return result;
     }
@@ -123,6 +141,7 @@ public class Orders implements Serializable {
         sb.append(id);
         sb.append(", ").append(userId);
         sb.append(", ").append(totalPrice);
+        sb.append(", ").append(status);
         sb.append(", ").append(createdAt);
 
         sb.append(")");

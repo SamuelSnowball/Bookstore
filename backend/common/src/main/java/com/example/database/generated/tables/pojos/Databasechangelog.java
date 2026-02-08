@@ -81,98 +81,98 @@ public class Databasechangelog implements Serializable {
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.ID</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.ID</code>.
      */
     public String getId() {
         return this.id;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.AUTHOR</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.AUTHOR</code>.
      */
     public String getAuthor() {
         return this.author;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.FILENAME</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.FILENAME</code>.
      */
     public String getFilename() {
         return this.filename;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.DATEEXECUTED</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.DATEEXECUTED</code>.
      */
     public LocalDateTime getDateexecuted() {
         return this.dateexecuted;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.ORDEREXECUTED</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.ORDEREXECUTED</code>.
      */
     public Integer getOrderexecuted() {
         return this.orderexecuted;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.EXECTYPE</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.EXECTYPE</code>.
      */
     public String getExectype() {
         return this.exectype;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.MD5SUM</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.MD5SUM</code>.
      */
     public String getMd5sum() {
         return this.md5sum;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.DESCRIPTION</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.DESCRIPTION</code>.
      */
     public String getDescription() {
         return this.description;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.COMMENTS</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.COMMENTS</code>.
      */
     public String getComments() {
         return this.comments;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.TAG</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.TAG</code>.
      */
     public String getTag() {
         return this.tag;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.LIQUIBASE</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.LIQUIBASE</code>.
      */
     public String getLiquibase() {
         return this.liquibase;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.CONTEXTS</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.CONTEXTS</code>.
      */
     public String getContexts() {
         return this.contexts;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.LABELS</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.LABELS</code>.
      */
     public String getLabels() {
         return this.labels;
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangelog.DEPLOYMENT_ID</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOG.DEPLOYMENT_ID</code>.
      */
     public String getDeploymentId() {
         return this.deploymentId;

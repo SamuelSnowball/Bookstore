@@ -11,6 +11,7 @@ import org.jooq.DSLContext;
 import org.jooq.impl.DefaultConfiguration;
 import org.springframework.stereotype.Repository;
 
+import com.example.common.model.OrderStatus;
 import com.example.database.generated.tables.daos.OrdersDao;
 import com.example.database.generated.tables.pojos.OrderDetailVw;
 
@@ -27,17 +28,31 @@ public class OrderRepository extends OrdersDao {
         this.create = dslContext;
     }
 
-    public int createOrder(int userId, BigDecimal totalPrice) {
+    public int createOrder(int userId, BigDecimal totalPrice, OrderStatus status) {
         Integer orderId = create.insertInto(ORDERS)
                 .set(ORDERS.USER_ID, userId)
                 .set(ORDERS.TOTAL_PRICE, totalPrice)
+                .set(ORDERS.STATUS, status.name())
                 .returningResult(ORDERS.ID)
                 .fetchOne()
                 .value1();
         
-        log.info("Created order {} for user: {}", orderId, userId);
+        log.info("Created order {} for user: {} with status: {}", orderId, userId, status);
         
         return orderId;
+    }
+
+    public void updateOrderStatus(int orderId, OrderStatus status) {
+        int updated = create.update(ORDERS)
+                .set(ORDERS.STATUS, status.name())
+                .where(ORDERS.ID.eq(orderId))
+                .execute();
+        
+        if (updated > 0) {
+            log.info("Updated order {} status to: {}", orderId, status);
+        } else {
+            log.warn("Failed to update order {} status - order not found", orderId);
+        }
     }
 
     public void addBookToOrder(int orderId, int bookId, BigDecimal price, int quantity) {

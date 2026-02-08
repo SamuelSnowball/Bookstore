@@ -164,7 +164,7 @@ if [ -n "$SERVICE_EXISTS" ]; then
       --cluster ${CLUSTER_NAME} \
       --service ${SERVICE_NAME} \
       --task-definition ${TASK_DEFINITION} \
-      --desired-count 1 \
+      --desired-count 0 \
       --force-new-deployment \
       --region ${AWS_REGION}
     echo -e "${GREEN}✓ Service updated${NC}"

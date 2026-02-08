@@ -11,6 +11,18 @@ service:
   targetPort: 9003
 
 env:
+  - name: SPRING_DATASOURCE_URL
+    value: "jdbc:mysql://mysql:3306/mydatabase?serverTimezone=UTC"
+  - name: SPRING_DATASOURCE_USERNAME
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: username
+  - name: SPRING_DATASOURCE_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: mysql-secret
+        key: password
   - name: STRIPE_SECRET_KEY
     valueFrom:
       secretKeyRef:

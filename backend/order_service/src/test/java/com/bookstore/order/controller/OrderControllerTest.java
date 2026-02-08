@@ -70,6 +70,7 @@ class OrderControllerTest {
             ORDER_ID,
             USER_ID,
             BigDecimal.valueOf(29.99),
+            "CREATED",
             LocalDateTime.of(2026, 1, 15, 10, 30),
             10,
             "Test Book Title",

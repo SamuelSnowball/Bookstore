@@ -63,73 +63,87 @@ public class OrderDetailVwRecord extends TableRecordImpl<OrderDetailVwRecord> {
     }
 
     /**
+     * Setter for <code>mydatabase.order_detail_vw.status</code>.
+     */
+    public void setStatus(String value) {
+        set(3, value);
+    }
+
+    /**
+     * Getter for <code>mydatabase.order_detail_vw.status</code>.
+     */
+    public String getStatus() {
+        return (String) get(3);
+    }
+
+    /**
      * Setter for <code>mydatabase.order_detail_vw.created_at</code>.
      */
     public void setCreatedAt(LocalDateTime value) {
-        set(3, value);
+        set(4, value);
     }
 
     /**
      * Getter for <code>mydatabase.order_detail_vw.created_at</code>.
      */
     public LocalDateTime getCreatedAt() {
-        return (LocalDateTime) get(3);
+        return (LocalDateTime) get(4);
     }
 
     /**
      * Setter for <code>mydatabase.order_detail_vw.book_id</code>.
      */
     public void setBookId(Integer value) {
-        set(4, value);
+        set(5, value);
     }
 
     /**
      * Getter for <code>mydatabase.order_detail_vw.book_id</code>.
      */
     public Integer getBookId() {
-        return (Integer) get(4);
+        return (Integer) get(5);
     }
 
     /**
      * Setter for <code>mydatabase.order_detail_vw.title</code>.
      */
     public void setTitle(String value) {
-        set(5, value);
+        set(6, value);
     }
 
     /**
      * Getter for <code>mydatabase.order_detail_vw.title</code>.
      */
     public String getTitle() {
-        return (String) get(5);
+        return (String) get(6);
     }
 
     /**
      * Setter for <code>mydatabase.order_detail_vw.price</code>.
      */
     public void setPrice(BigDecimal value) {
-        set(6, value);
+        set(7, value);
     }
 
     /**
      * Getter for <code>mydatabase.order_detail_vw.price</code>.
      */
     public BigDecimal getPrice() {
-        return (BigDecimal) get(6);
+        return (BigDecimal) get(7);
     }
 
     /**
      * Setter for <code>mydatabase.order_detail_vw.quantity</code>.
      */
     public void setQuantity(Integer value) {
-        set(7, value);
+        set(8, value);
     }
 
     /**
      * Getter for <code>mydatabase.order_detail_vw.quantity</code>.
      */
     public Integer getQuantity() {
-        return (Integer) get(7);
+        return (Integer) get(8);
     }
 
     // -------------------------------------------------------------------------
@@ -146,12 +160,13 @@ public class OrderDetailVwRecord extends TableRecordImpl<OrderDetailVwRecord> {
     /**
      * Create a detached, initialised OrderDetailVwRecord
      */
-    public OrderDetailVwRecord(Integer id, Integer userId, BigDecimal totalPrice, LocalDateTime createdAt, Integer bookId, String title, BigDecimal price, Integer quantity) {
+    public OrderDetailVwRecord(Integer id, Integer userId, BigDecimal totalPrice, String status, LocalDateTime createdAt, Integer bookId, String title, BigDecimal price, Integer quantity) {
         super(OrderDetailVw.ORDER_DETAIL_VW);
 
         setId(id);
         setUserId(userId);
         setTotalPrice(totalPrice);
+        setStatus(status);
         setCreatedAt(createdAt);
         setBookId(bookId);
         setTitle(title);
@@ -170,6 +185,7 @@ public class OrderDetailVwRecord extends TableRecordImpl<OrderDetailVwRecord> {
             setId(value.getId());
             setUserId(value.getUserId());
             setTotalPrice(value.getTotalPrice());
+            setStatus(value.getStatus());
             setCreatedAt(value.getCreatedAt());
             setBookId(value.getBookId());
             setTitle(value.getTitle());
