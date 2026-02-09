@@ -234,7 +234,7 @@
         },
         {
           "name": "CORS.ALLOWED.ORIGINS",
-          "value": "http://13.40.161.111/,https://your-cloudfront-domain.cloudfront.net"
+          "value": "http://bookstore.snowballsjourney.com/,https://your-cloudfront-domain.cloudfront.net"
         },
         {
           "name": "ENTITY_SERVICE_URL",
@@ -290,10 +290,21 @@
       "memory": 512,
       "portMappings": [
         {
-          "containerPort": 5173,
+          "name": "ui-80-tcp",
+          "containerPort": 80,
           "protocol": "tcp"
         }
       ],
+      "healthCheck": {
+        "command": [
+          "CMD-SHELL",
+          "wget --quiet --tries=1 --spider http://localhost/ || exit 1"
+        ],
+        "interval": 30,
+        "timeout": 5,
+        "retries": 3,
+        "startPeriod": 30
+      },
       "dependsOn": [
         {
           "containerName": "auth-service",

@@ -1,14 +1,18 @@
 # Overview
 
-A microservices project demonstrating use of Spring Boot, React, and AWS deployment patterns. Initially I had planned to deploy to EKS but instead using ECS on Fargate due to it being much cheaper.
+A microservices project demonstrating use of Spring Boot, React, and AWS deployment patterns. Initially I had planned to deploy to EKS but instead using ECS on Fargate due to it being cheaper.
 
-Live deployment is currently WIP whilst I add an ALB for HTTPS, the site will load but you can't yet login: http://bookstore.snowballsjourney.com/
+Live deployment (it runs between 10am-4pm (UTC) to save $): https://bookstore.snowballsjourney.com/
 
 Developed using Claude Sonnet 4.5 - identifiable by the use of emojis in deployment scripts! 🚀
 
-## Architecture
+## AWS Architecture
 
-A React + TypeScript frontend communicating with a microservices backend through an API gateway:
+![Architecture Diagram](diagrams/aws.png)
+
+## ECS / Service Architecture
+
+A React + TypeScript frontend communicating with a microservices backend through an API gateway (Spring Cloud API Gateway).
 
 ```
 Browser (React + Vite)
