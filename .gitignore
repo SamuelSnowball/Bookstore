@@ -5,6 +5,12 @@ ui/dist-ssr/
 e2e/cypress/videos/
 e2e/cypress/screenshots/
 
+# Scripts
+ecs/create_secrets.sh
+ecs/fix_iam_roles.sh
+ecs/setup_deployment_permissions.sh
+backend/scripts/
+
 # Environment and scripts
 .env
 .env.*

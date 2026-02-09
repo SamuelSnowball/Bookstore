@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.example.common.database.MyDataSource;
+import com.example.common.model.OrderStatus;
 import com.example.common.repository.BaseIntegrationTest;
 import com.example.database.generated.tables.pojos.OrderDetailVw;
 
@@ -34,7 +35,7 @@ class OrderRepositoryTest extends BaseIntegrationTest {
     @Test
     void testCreateOrder() {
         // Act
-        int orderId = orderRepository.createOrder(USER_ID, TOTAL_PRICE);
+        int orderId = orderRepository.createOrder(USER_ID, TOTAL_PRICE, OrderStatus.CREATED);
 
         // Assert
         assertNotNull(orderId);
@@ -48,7 +49,7 @@ class OrderRepositoryTest extends BaseIntegrationTest {
     @Test
     void testAddBookToOrder() {
         // Arrange - create an order first
-        int orderId = orderRepository.createOrder(USER_ID, TOTAL_PRICE);
+        int orderId = orderRepository.createOrder(USER_ID, TOTAL_PRICE, OrderStatus.CREATED);
 
         // Act - add books to the order
         orderRepository.addBookToOrder(orderId, BOOK_ID_1, BOOK_PRICE_1, 2);
@@ -85,8 +86,8 @@ class OrderRepositoryTest extends BaseIntegrationTest {
     @Test
     void testGetOrderDetailsByUserId() {
         // Arrange - create multiple orders
-        int orderId1 = orderRepository.createOrder(USER_ID, BigDecimal.valueOf(29.99));
-        int orderId2 = orderRepository.createOrder(USER_ID, BigDecimal.valueOf(49.99));
+        int orderId1 = orderRepository.createOrder(USER_ID, BigDecimal.valueOf(29.99), OrderStatus.CREATED);
+        int orderId2 = orderRepository.createOrder(USER_ID, BigDecimal.valueOf(49.99), OrderStatus.CREATED);
 
         // Act
         List<OrderDetailVw> orderDetails = orderRepository.getOrderDetailsByUserId(USER_ID);
@@ -117,7 +118,7 @@ class OrderRepositoryTest extends BaseIntegrationTest {
         // This test simulates a complete order creation flow
         
         // Step 1: Create order
-        int orderId = orderRepository.createOrder(USER_ID, TOTAL_PRICE);
+        int orderId = orderRepository.createOrder(USER_ID, TOTAL_PRICE, OrderStatus.CREATED);
         assertNotNull(orderId);
         
         // Step 2: Add books to order

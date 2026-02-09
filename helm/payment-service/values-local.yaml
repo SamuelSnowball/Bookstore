@@ -23,8 +23,6 @@ env:
       secretKeyRef:
         name: mysql-secret
         key: password
-  - name: ORDER_SERVICE_URL
-    value: "http://order-service.bookstore.svc.cluster.local:9002"
   - name: STRIPE_API_KEY
     valueFrom:
       secretKeyRef:

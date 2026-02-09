@@ -26,6 +26,7 @@ import com.example.database.generated.tables.pojos.CartItemDetailVw;
 import com.example.database.generated.tables.pojos.OrderDetailVw;
 import com.bookstore.order.repository.CartRepository;
 import com.bookstore.order.repository.OrderRepository;
+import com.example.common.model.OrderStatus;
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
@@ -63,14 +64,14 @@ class OrderServiceTest {
         
         List<CartItemDetailVw> cartItems = Arrays.asList(cartItem1, cartItem2);
         when(cartRepository.getCartItemsByUserId(USER_ID)).thenReturn(cartItems);
-        when(orderRepository.createOrder(eq(USER_ID), any(BigDecimal.class))).thenReturn(ORDER_ID);
+        when(orderRepository.createOrder(eq(USER_ID), any(BigDecimal.class), eq(OrderStatus.CREATED))).thenReturn(ORDER_ID);
 
         // Act
         int result = orderService.createOrderFromCart(USER_ID);
 
         // Assert
         assertEquals(ORDER_ID, result);
-        verify(orderRepository, times(1)).createOrder(eq(USER_ID), any(BigDecimal.class));
+        verify(orderRepository, times(1)).createOrder(eq(USER_ID), any(BigDecimal.class), eq(OrderStatus.CREATED));
         verify(orderRepository, times(1)).addBookToOrder(ORDER_ID, BOOK_ID_1, BigDecimal.valueOf(15.99), 2);
         verify(orderRepository, times(1)).addBookToOrder(ORDER_ID, BOOK_ID_2, BigDecimal.valueOf(9.99), 1);
         verify(cartRepository, times(1)).clearCart(USER_ID);
@@ -86,7 +87,7 @@ class OrderServiceTest {
             orderService.createOrderFromCart(USER_ID);
         });
         
-        verify(orderRepository, never()).createOrder(anyInt(), any(BigDecimal.class));
+        verify(orderRepository, never()).createOrder(anyInt(), any(BigDecimal.class), any(OrderStatus.class));
         verify(cartRepository, never()).clearCart(anyInt());
     }
 
@@ -103,13 +104,13 @@ class OrderServiceTest {
         
         List<CartItemDetailVw> cartItems = Arrays.asList(cartItem1, cartItem2);
         when(cartRepository.getCartItemsByUserId(USER_ID)).thenReturn(cartItems);
-        when(orderRepository.createOrder(eq(USER_ID), any(BigDecimal.class))).thenReturn(ORDER_ID);
+        when(orderRepository.createOrder(eq(USER_ID), any(BigDecimal.class), eq(OrderStatus.CREATED))).thenReturn(ORDER_ID);
 
         // Act
         orderService.createOrderFromCart(USER_ID);
 
         // Assert - verify total is (3 * 10.00) + (2 * 25.50) = 30.00 + 51.00 = 81.00
-        verify(orderRepository).createOrder(eq(USER_ID), eq(BigDecimal.valueOf(81.0)));
+        verify(orderRepository).createOrder(eq(USER_ID), eq(BigDecimal.valueOf(81.0)), eq(OrderStatus.CREATED));
     }
 
     @Test
@@ -119,6 +120,7 @@ class OrderServiceTest {
             ORDER_ID,
             USER_ID,
             BigDecimal.valueOf(29.99),
+            "CREATED",
             LocalDateTime.now(),
             10,
             "Book Title 1",
@@ -130,6 +132,7 @@ class OrderServiceTest {
             ORDER_ID + 1,
             USER_ID,
             BigDecimal.valueOf(49.99),
+            "CREATED",
             LocalDateTime.now(),
             20,
             "Book Title 2",

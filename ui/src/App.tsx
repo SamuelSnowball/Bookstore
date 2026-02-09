@@ -2,17 +2,16 @@ import {
   CheckoutProvider
 } from '@stripe/react-stripe-js/checkout';
 import { loadStripe } from '@stripe/stripe-js';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   Route,
   BrowserRouter as Router,
   Routes,
 } from "react-router-dom";
-import { CartItem } from "./types";
+import { createCheckoutSession, createOrderFromCart, getCartItems } from './api';
 import CheckoutForm from './components/stripe/CheckoutForm';
 import Complete from './components/stripe/Complete';
-import { getCartItems } from './api';
-import { API_CONFIG } from './config';
+import { CartItem } from "./types";
 
 import "./App.css";
 import BookStore from "./BookStore";
@@ -60,26 +59,51 @@ const CheckoutWrapper = () => {
     }
     sessionCreationAttempted.current = true;
     
-    // Fetch cart items to calculate total
+    // Flow: Get cart -> Create order -> Create checkout session
     getCartItems()
-      .then((items) => {
-        const total = items.reduce((sum: number, item: CartItem) => sum + ((item.price || 0) * item.bookQuantity), 0);
+      .then((cartItems: CartItem[]) => {
+        if (!cartItems || cartItems.length === 0) {
+          throw new Error('Cart is empty');
+        }
+
+        const total = cartItems.reduce((sum: number, item: CartItem) => 
+          sum + ((item.price || 0) * item.bookQuantity), 0
+        );
         setCartTotal(total);
+
+        // Create order from cart
+        return createOrderFromCart().then((orderId: number) => ({
+          cartItems,
+          orderId,
+          total
+        }));
       })
-      .catch((err) => console.error('Failed to fetch cart:', err));
-    
-    // Create checkout session when component mounts
-    fetch(`${API_CONFIG.API_URL}/payment/create-checkout-session`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
-      },
-      // No body required as we get cart on the server side
-    })
-      .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret))
-      .catch((err) => setError(err.message));
+      .then(({ cartItems, orderId, total }) => {
+        // Build payment request
+        const paymentRequest = {
+          userId: 0, // Will be extracted from JWT on backend
+          orderId: orderId,
+          totalAmount: total,
+          items: cartItems.map((item: CartItem) => ({
+            bookId: item.bookId,
+            title: item.title,
+            price: item.price || 0,
+            quantity: item.bookQuantity
+          }))
+        };
+
+        console.log('Payment request being sent:', JSON.stringify(paymentRequest, null, 2));
+        
+        // Create checkout session
+        return createCheckoutSession(paymentRequest);
+      })
+      .then((data) => {
+        setClientSecret(data.clientSecret);
+      })
+      .catch((err) => {
+        console.error('Checkout creation error:', err);
+        setError(err.message);
+      });
   }, []);
 
   if (error) {

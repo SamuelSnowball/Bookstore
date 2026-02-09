@@ -23,6 +23,8 @@ env:
       secretKeyRef:
         name: mysql-secret
         key: password
+  - name: PAYMENT_SERVICE_URL
+    value: "http://payment-service-payment-service.bookstore.svc.cluster.local:9003"
 
 resources:
   limits:

@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS orders (
   id INT NOT NULL AUTO_INCREMENT,
   user_id INT NOT NULL,
   total_price DECIMAL(10, 2) NOT NULL,
+  status VARCHAR(50) NOT NULL DEFAULT 'CREATED',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (id),
   FOREIGN KEY (user_id) REFERENCES user(id)
@@ -30,6 +31,7 @@ SELECT
     orders.id,
     orders.user_id,
     orders.total_price,
+    orders.status,
     orders.created_at,
     book_orders.book_id,
     book.title,

@@ -105,6 +105,21 @@ public class OrdersDao extends AbstractSpringDAOImpl<OrdersRecord, com.example.d
     }
 
     /**
+     * Fetch records that have <code>status BETWEEN lowerInclusive AND
+     * upperInclusive</code>
+     */
+    public List<com.example.database.generated.tables.pojos.Orders> fetchRangeOfStatus(String lowerInclusive, String upperInclusive) {
+        return fetchRange(Orders.ORDERS.STATUS, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>status IN (values)</code>
+     */
+    public List<com.example.database.generated.tables.pojos.Orders> fetchByStatus(String... values) {
+        return fetch(Orders.ORDERS.STATUS, values);
+    }
+
+    /**
      * Fetch records that have <code>created_at BETWEEN lowerInclusive AND
      * upperInclusive</code>
      */

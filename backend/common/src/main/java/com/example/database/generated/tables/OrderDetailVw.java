@@ -65,6 +65,11 @@ public class OrderDetailVw extends TableImpl<OrderDetailVwRecord> {
     public final TableField<OrderDetailVwRecord, BigDecimal> TOTAL_PRICE = createField(DSL.name("total_price"), SQLDataType.DECIMAL(10, 2).nullable(false), this, "");
 
     /**
+     * The column <code>mydatabase.order_detail_vw.status</code>.
+     */
+    public final TableField<OrderDetailVwRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR(50).nullable(false).defaultValue(DSL.inline("CREATED", SQLDataType.VARCHAR)), this, "");
+
+    /**
      * The column <code>mydatabase.order_detail_vw.created_at</code>.
      */
     public final TableField<OrderDetailVwRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(0).defaultValue(DSL.field(DSL.raw("CURRENT_TIMESTAMP"), SQLDataType.LOCALDATETIME)), this, "");
@@ -94,7 +99,7 @@ public class OrderDetailVw extends TableImpl<OrderDetailVwRecord> {
     }
 
     private OrderDetailVw(Name alias, Table<OrderDetailVwRecord> aliased, Field<?>[] parameters, Condition where) {
-        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view `order_detail_vw` as select `mydatabase`.`orders`.`id` AS `id`,`mydatabase`.`orders`.`user_id` AS `user_id`,`mydatabase`.`orders`.`total_price` AS `total_price`,`mydatabase`.`orders`.`created_at` AS `created_at`,`mydatabase`.`book_orders`.`book_id` AS `book_id`,`mydatabase`.`book`.`title` AS `title`,`mydatabase`.`book_orders`.`price` AS `price`,`mydatabase`.`book_orders`.`quantity` AS `quantity` from ((`mydatabase`.`orders` left join `mydatabase`.`book_orders` on((`mydatabase`.`orders`.`id` = `mydatabase`.`book_orders`.`order_id`))) left join `mydatabase`.`book` on((`mydatabase`.`book_orders`.`book_id` = `mydatabase`.`book`.`id`)))"), where);
+        super(alias, null, aliased, parameters, DSL.comment(""), TableOptions.view("create view `order_detail_vw` as select `mydatabase`.`orders`.`id` AS `id`,`mydatabase`.`orders`.`user_id` AS `user_id`,`mydatabase`.`orders`.`total_price` AS `total_price`,`mydatabase`.`orders`.`status` AS `status`,`mydatabase`.`orders`.`created_at` AS `created_at`,`mydatabase`.`book_orders`.`book_id` AS `book_id`,`mydatabase`.`book`.`title` AS `title`,`mydatabase`.`book_orders`.`price` AS `price`,`mydatabase`.`book_orders`.`quantity` AS `quantity` from ((`mydatabase`.`orders` left join `mydatabase`.`book_orders` on((`mydatabase`.`orders`.`id` = `mydatabase`.`book_orders`.`order_id`))) left join `mydatabase`.`book` on((`mydatabase`.`book_orders`.`book_id` = `mydatabase`.`book`.`id`)))"), where);
     }
 
     /**

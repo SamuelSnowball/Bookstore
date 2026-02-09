@@ -21,56 +21,56 @@ public class DatabasechangeloglockRecord extends UpdatableRecordImpl<Databasecha
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>mydatabase.databasechangeloglock.ID</code>.
+     * Setter for <code>mydatabase.DATABASECHANGELOGLOCK.ID</code>.
      */
     public void setId(Integer value) {
         set(0, value);
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.ID</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.ID</code>.
      */
     public Integer getId() {
         return (Integer) get(0);
     }
 
     /**
-     * Setter for <code>mydatabase.databasechangeloglock.LOCKED</code>.
+     * Setter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKED</code>.
      */
     public void setLocked(Byte value) {
         set(1, value);
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.LOCKED</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKED</code>.
      */
     public Byte getLocked() {
         return (Byte) get(1);
     }
 
     /**
-     * Setter for <code>mydatabase.databasechangeloglock.LOCKGRANTED</code>.
+     * Setter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKGRANTED</code>.
      */
     public void setLockgranted(LocalDateTime value) {
         set(2, value);
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.LOCKGRANTED</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKGRANTED</code>.
      */
     public LocalDateTime getLockgranted() {
         return (LocalDateTime) get(2);
     }
 
     /**
-     * Setter for <code>mydatabase.databasechangeloglock.LOCKEDBY</code>.
+     * Setter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKEDBY</code>.
      */
     public void setLockedby(String value) {
         set(3, value);
     }
 
     /**
-     * Getter for <code>mydatabase.databasechangeloglock.LOCKEDBY</code>.
+     * Getter for <code>mydatabase.DATABASECHANGELOGLOCK.LOCKEDBY</code>.
      */
     public String getLockedby() {
         return (String) get(3);

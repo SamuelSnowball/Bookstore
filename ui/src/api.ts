@@ -149,3 +149,45 @@ export function getOrders(){
       }
    }).then((res) => res.json());
 }
+
+export function createOrderFromCart(){
+   const token = sessionStorage.getItem('authToken');
+   return fetch(`${API_CONFIG.API_URL}/orders/create-from-cart`, {
+      method: 'POST',
+      headers: {
+         'Authorization': `Bearer ${token}`
+      }
+   }).then((res) => {
+      if (!res.ok) {
+         throw new Error('Failed to create order from cart');
+      }
+      return res.json();
+   });
+}
+
+export function createCheckoutSession(paymentRequest: {
+   userId: number;
+   orderId: number;
+   totalAmount: number;
+   items: Array<{
+      bookId: number;
+      title: string;
+      price: number;
+      quantity: number;
+   }>;
+}){
+   const token = sessionStorage.getItem('authToken');
+   return fetch(`${API_CONFIG.API_URL}/payment/create-checkout-session`, {
+      method: 'POST',
+      headers: {
+         'Authorization': `Bearer ${token}`,
+         'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(paymentRequest)
+   }).then((res) => {
+      if (!res.ok) {
+         throw new Error('Failed to create checkout session');
+      }
+      return res.json();
+   });
+}

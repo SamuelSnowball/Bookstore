@@ -78,6 +78,11 @@ public class Orders extends TableImpl<OrdersRecord> {
     public final TableField<OrdersRecord, BigDecimal> TOTAL_PRICE = createField(DSL.name("total_price"), SQLDataType.DECIMAL(10, 2).nullable(false), this, "");
 
     /**
+     * The column <code>mydatabase.orders.status</code>.
+     */
+    public final TableField<OrdersRecord, String> STATUS = createField(DSL.name("status"), SQLDataType.VARCHAR(50).nullable(false).defaultValue(DSL.inline("CREATED", SQLDataType.VARCHAR)), this, "");
+
+    /**
      * The column <code>mydatabase.orders.created_at</code>.
      */
     public final TableField<OrdersRecord, LocalDateTime> CREATED_AT = createField(DSL.name("created_at"), SQLDataType.LOCALDATETIME(0).defaultValue(DSL.field(DSL.raw("CURRENT_TIMESTAMP"), SQLDataType.LOCALDATETIME)), this, "");

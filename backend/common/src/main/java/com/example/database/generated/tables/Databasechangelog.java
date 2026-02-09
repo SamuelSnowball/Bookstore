@@ -36,7 +36,7 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
     private static final long serialVersionUID = 1L;
 
     /**
-     * The reference instance of <code>mydatabase.databasechangelog</code>
+     * The reference instance of <code>mydatabase.DATABASECHANGELOG</code>
      */
     public static final Databasechangelog DATABASECHANGELOG = new Databasechangelog();
 
@@ -49,72 +49,72 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
     }
 
     /**
-     * The column <code>mydatabase.databasechangelog.ID</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.ID</code>.
      */
     public final TableField<DatabasechangelogRecord, String> ID = createField(DSL.name("ID"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.AUTHOR</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.AUTHOR</code>.
      */
     public final TableField<DatabasechangelogRecord, String> AUTHOR = createField(DSL.name("AUTHOR"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.FILENAME</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.FILENAME</code>.
      */
     public final TableField<DatabasechangelogRecord, String> FILENAME = createField(DSL.name("FILENAME"), SQLDataType.VARCHAR(255).nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.DATEEXECUTED</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.DATEEXECUTED</code>.
      */
     public final TableField<DatabasechangelogRecord, LocalDateTime> DATEEXECUTED = createField(DSL.name("DATEEXECUTED"), SQLDataType.LOCALDATETIME(0).nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.ORDEREXECUTED</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.ORDEREXECUTED</code>.
      */
     public final TableField<DatabasechangelogRecord, Integer> ORDEREXECUTED = createField(DSL.name("ORDEREXECUTED"), SQLDataType.INTEGER.nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.EXECTYPE</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.EXECTYPE</code>.
      */
     public final TableField<DatabasechangelogRecord, String> EXECTYPE = createField(DSL.name("EXECTYPE"), SQLDataType.VARCHAR(10).nullable(false), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.MD5SUM</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.MD5SUM</code>.
      */
     public final TableField<DatabasechangelogRecord, String> MD5SUM = createField(DSL.name("MD5SUM"), SQLDataType.VARCHAR(35), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.DESCRIPTION</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.DESCRIPTION</code>.
      */
     public final TableField<DatabasechangelogRecord, String> DESCRIPTION = createField(DSL.name("DESCRIPTION"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.COMMENTS</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.COMMENTS</code>.
      */
     public final TableField<DatabasechangelogRecord, String> COMMENTS = createField(DSL.name("COMMENTS"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.TAG</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.TAG</code>.
      */
     public final TableField<DatabasechangelogRecord, String> TAG = createField(DSL.name("TAG"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.LIQUIBASE</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.LIQUIBASE</code>.
      */
     public final TableField<DatabasechangelogRecord, String> LIQUIBASE = createField(DSL.name("LIQUIBASE"), SQLDataType.VARCHAR(20), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.CONTEXTS</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.CONTEXTS</code>.
      */
     public final TableField<DatabasechangelogRecord, String> CONTEXTS = createField(DSL.name("CONTEXTS"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.LABELS</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.LABELS</code>.
      */
     public final TableField<DatabasechangelogRecord, String> LABELS = createField(DSL.name("LABELS"), SQLDataType.VARCHAR(255), this, "");
 
     /**
-     * The column <code>mydatabase.databasechangelog.DEPLOYMENT_ID</code>.
+     * The column <code>mydatabase.DATABASECHANGELOG.DEPLOYMENT_ID</code>.
      */
     public final TableField<DatabasechangelogRecord, String> DEPLOYMENT_ID = createField(DSL.name("DEPLOYMENT_ID"), SQLDataType.VARCHAR(10), this, "");
 
@@ -127,7 +127,7 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
     }
 
     /**
-     * Create an aliased <code>mydatabase.databasechangelog</code> table
+     * Create an aliased <code>mydatabase.DATABASECHANGELOG</code> table
      * reference
      */
     public Databasechangelog(String alias) {
@@ -135,7 +135,7 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
     }
 
     /**
-     * Create an aliased <code>mydatabase.databasechangelog</code> table
+     * Create an aliased <code>mydatabase.DATABASECHANGELOG</code> table
      * reference
      */
     public Databasechangelog(Name alias) {
@@ -143,10 +143,10 @@ public class Databasechangelog extends TableImpl<DatabasechangelogRecord> {
     }
 
     /**
-     * Create a <code>mydatabase.databasechangelog</code> table reference
+     * Create a <code>mydatabase.DATABASECHANGELOG</code> table reference
      */
     public Databasechangelog() {
-        this(DSL.name("databasechangelog"), null);
+        this(DSL.name("DATABASECHANGELOG"), null);
     }
 
     @Override

@@ -55,12 +55,12 @@ public class Tables {
     public static final CartItemDetailVw CART_ITEM_DETAIL_VW = CartItemDetailVw.CART_ITEM_DETAIL_VW;
 
     /**
-     * The table <code>mydatabase.databasechangelog</code>.
+     * The table <code>mydatabase.DATABASECHANGELOG</code>.
      */
     public static final Databasechangelog DATABASECHANGELOG = Databasechangelog.DATABASECHANGELOG;
 
     /**
-     * The table <code>mydatabase.databasechangeloglock</code>.
+     * The table <code>mydatabase.DATABASECHANGELOGLOCK</code>.
      */
     public static final Databasechangeloglock DATABASECHANGELOGLOCK = Databasechangeloglock.DATABASECHANGELOGLOCK;
 

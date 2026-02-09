@@ -7,12 +7,17 @@ import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstore.order.service.OrderService;
 import com.example.common.controller.BaseController;
+import com.example.common.model.OrderStatus;
 import com.example.database.generated.tables.pojos.OrderDetailVw;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -57,7 +62,7 @@ public class OrderController extends BaseController {
                 newResponse.setOrderId(detail.getId());
                 newResponse.setOrderDate(detail.getCreatedAt().toString());
                 newResponse.setTotalAmount(detail.getTotalPrice().doubleValue());
-                newResponse.setStatus("Completed");
+                newResponse.setStatus(detail.getStatus() != null ? detail.getStatus() : "CREATED");
                 return newResponse;
             });
             
@@ -75,15 +80,27 @@ public class OrderController extends BaseController {
         return new ArrayList<>(orderMap.values());
     }
 
-    @Operation(summary = "Create order from cart for authenticated user (called by payment service)")
+    @Operation(summary = "Create order from cart for authenticated user")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Order created successfully, returns order ID")
     })
-    @PostMapping("/from-cart")
+    @PostMapping("/create-from-cart")
     public int createOrderFromCart() {
         Integer userId = getCurrentUserId();
         log.info("Creating order from cart for user: {}", userId);
         return orderService.createOrderFromCart(userId);
+    }
+
+    @Operation(summary = "Update order status")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Order status updated successfully")
+    })
+    @PutMapping("/{orderId}/status")
+    public void updateOrderStatus(@PathVariable Integer orderId, @RequestParam OrderStatus status) {
+        // This endpoint is called by payment service after payment completion
+        // No user authentication needed here - payment service handles that
+        log.info("Updating order {} status to {}", orderId, status);
+        orderService.updateOrderStatus(orderId, status);
     }
 
     @Data

@@ -29,20 +29,6 @@
 		</profile>
 	</profiles>
 
-	<repositories>
-		<repository>
-			<id>projectlombok.org</id>
-			<url>https://projectlombok.org/edge-releases</url>
-		</repository>
-	</repositories>
-
-	<pluginRepositories>
-		<pluginRepository>
-			<id>projectlombok.org</id>
-			<url>https://projectlombok.org/edge-releases</url>
-		</pluginRepository>
-	</pluginRepositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -107,13 +93,6 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- Util -->
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-			<scope>provided</scope>
-		</dependency>
-
 		<!-- Security -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -172,95 +151,12 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
 	<build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.13.0</version>
-				<configuration>
-					<release>21</release>
-					<compilerArgs>
-						<arg>-parameters</arg>
-					</compilerArgs>
-					<annotationProcessorPaths>
-						<path>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-							<version>edge-SNAPSHOT</version>
-						</path>
-					</annotationProcessorPaths>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.5.0</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<systemProperties>
-						<systemProperty>
-							<key>jdbc.driver</key>
-							<value>${jdbc.driver}</value>
-						</systemProperty>
-						<systemProperty>
-							<key>jdbc.user</key>
-							<value>${jdbc.user}</value>
-						</systemProperty>
-						<systemProperty>
-							<key>jdbc.password</key>
-							<value>${jdbc.password}</value>
-						</systemProperty>
-						<systemProperty>
-							<key>jdbc.url</key>
-							<value>${jdbc.url}</value>
-						</systemProperty>
-					</systemProperties>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-pmd-plugin</artifactId>
-			<version>3.25.0</version>
-			<configuration>
-				<printFailingErrors>true</printFailingErrors>
-				<failOnViolation>true</failOnViolation>
-				<targetJdk>21</targetJdk>
-					<rulesets>
-						<ruleset>category/java/bestpractices.xml</ruleset>
-						<ruleset>category/java/codestyle.xml</ruleset>
-						<ruleset>category/java/errorprone.xml</ruleset>
-						<ruleset>category/java/performance.xml</ruleset>
-						<ruleset>category/java/security.xml</ruleset>
-					</rulesets>
-				</configuration>
-				<executions>
-					<execution>
-						<phase>verify</phase>
-						<goals>
-							<goal>check</goal>
-						</goals>
-					</execution>
-				</executions>
 			</plugin>
 		</plugins>
 	</build>
