@@ -1,8 +1,6 @@
 # Overview
 
-A microservices project demonstrating use of Spring Boot, React, and AWS deployment patterns. Initially I had planned to deploy to EKS but instead using ECS on Fargate due to it being cheaper.
-
-Live deployment (it runs between 10am-4pm (UTC) to save $): https://bookstore.snowballsjourney.com/
+A microservices project demonstrating use of Spring Boot, React, and AWS deployment patterns. Initially I had planned to deploy to EKS but instead using ECS on Fargate due to it being cheaper. Even that was costing $2 per day so it's been scaled down to save $.
 
 Developed using Claude Sonnet 4.5 - identifiable by the use of emojis in deployment scripts! 🚀
 
